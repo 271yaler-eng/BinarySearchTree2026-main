@@ -10,27 +10,39 @@ import java.util.*;
 public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T>
 {
     protected BinaryNode<T> root;      // reference to the root of this BST
+    protected int size;  
 
     // Creates an empty Binary Search Tree object
     public BinarySearchTree()
     {
+        root = null;
+        size = 0;
     }
 
     // Returns true if this BST is empty; otherwise, returns false.
     public boolean isEmpty()
     {
-        return false;
+        return size == 0;
     }
 
     // Returns the number of elements in this BST.
     public int size()
     {
-        return -1;
+        return size;
     }
 
     // Adds element to this BST. The tree retains its BST property.
     public void add (T element)
     {
+        BinaryNode<T> el = new BinaryNode<T>(element);
+        if(element.compareTo(root.getInfo()) == -1)
+        {
+            root.setLeft(el);
+        }
+        else if(element.compareTo(root.getInfo()) == 1)
+        {
+            root.setRight(el);
+        }
     }
 
     // Returns true if this BST contains an element e such that 
