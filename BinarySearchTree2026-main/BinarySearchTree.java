@@ -35,13 +35,32 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public void add (T element)
     {
         BinaryNode<T> el = new BinaryNode<T>(element);
-        if(element.compareTo(root.getInfo()) == -1)
+        BinaryNode<T> traversal = root;
+        if(root == null)
         {
-            root.setLeft(el);
+            root = el;
         }
-        else if(element.compareTo(root.getInfo()) == 1)
+        else
         {
-            root.setRight(el);
+            while(traversal.getLeft() != null && traversal.getRight() != null)
+            {
+                if(element.compareTo(traversal.getInfo()) == -1)
+                {
+                    traversal = traversal.getLeft();
+                }
+                else if(element.compareTo(traversal.getInfo()) == 1)
+                {
+                    traversal = traversal.getRight();
+                }
+            }
+            if(element.compareTo(traversal.getInfo()) == -1)
+            {
+                traversal.setLeft(el);
+            }
+            else if(element.compareTo(traversal.getInfo()) == 1)
+            {
+                traversal.setRight(el);
+            }
         }
     }
 
@@ -49,7 +68,31 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // e.compareTo(element) == 0; otherwise, returns false.
     public boolean contains (T element)
     {
-        return false;
+        BinaryNode<T> e = root;
+        int count = 0;
+        if(root.getInfo() == null)
+        {
+            return false;
+        }
+        else
+        {
+            while(count < size)
+            {
+                if(e.getInfo().compareTo(element) == 0)
+                {
+                    return true;
+                }
+                if(element.compareTo(e.getInfo()) == -1)
+                {
+                    e = e.getLeft();
+                }
+                else if(element.compareTo(e.getInfo()) == 1)
+                {
+                    e = e.getRight();
+                }
+            }
+            return false;
+        }
     }
 
     // Returns a graphical representation of the tree
