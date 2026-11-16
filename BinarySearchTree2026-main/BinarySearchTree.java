@@ -36,30 +36,52 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     {
         BinaryNode<T> el = new BinaryNode<T>(element);
         BinaryNode<T> traversal = root;
+        String direction = "";
         if(root == null)
         {
             root = el;
+            size++;
         }
         else
         {
-            while(traversal.getLeft() != null && traversal.getRight() != null)
+            while(direction.equals(""))
             {
-                if(element.compareTo(traversal.getInfo()) == -1)
+                if(element.compareTo(traversal.getInfo()) < 0)
                 {
-                    traversal = traversal.getLeft();
+                    if(traversal.getLeft() == null)
+                    {
+                        direction = "left";
+                    }
+                    else
+                    {
+                        traversal = traversal.getLeft();
+                    }
                 }
-                else if(element.compareTo(traversal.getInfo()) == 1)
+                else if(element.compareTo(traversal.getInfo()) > 0)
                 {
-                    traversal = traversal.getRight();
+                    if(traversal.getRight() == null)
+                    {
+                        direction = "right";
+                    }
+                    else
+                    {
+                        traversal = traversal.getRight();
+                    }
+                }
+                else
+                {
+                    break;
                 }
             }
-            if(element.compareTo(traversal.getInfo()) == -1)
+            if(direction.equals("left"))
             {
                 traversal.setLeft(el);
+                size++;
             }
-            else if(element.compareTo(traversal.getInfo()) == 1)
+            else if(direction.equals("right"))
             {
                 traversal.setRight(el);
+                size++;
             }
         }
     }
@@ -69,24 +91,27 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public boolean contains (T element)
     {
         BinaryNode<T> e = root;
-        int count = 0;
-        if(root.getInfo() == null)
+        if(e == null)
         {
             return false;
         }
+        else if(e.getInfo().compareTo(element) == 0)
+        {
+            return true;
+        }
         else
         {
-            while(count < size)
+            while(e != null)
             {
                 if(e.getInfo().compareTo(element) == 0)
                 {
                     return true;
                 }
-                if(element.compareTo(e.getInfo()) == -1)
+                if(element.compareTo(e.getInfo()) < 0)
                 {
                     e = e.getLeft();
                 }
-                else if(element.compareTo(e.getInfo()) == 1)
+                else if(element.compareTo(e.getInfo()) > 0)
                 {
                     e = e.getRight();
                 }
@@ -118,7 +143,24 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Returns a list of elements from a preorder traversal
     public List<T> preorderTraverse()
     {
-        return null;
+        ArrayList<T> elements = new ArrayList<>();
+        BinaryNode<T> traversal = root;
+        if(root == null)
+        {
+            return elements;
+        }
+        preorderTraverse(traversal, elements);
+        return elements;
+    }
+
+    private void preorderTraverse(BinaryNode<T> tree, List<T> list)
+    {
+        if(tree != null)
+        {
+            list.add(tree.getInfo());
+            preorderTraverse(tree.getLeft(), list);
+            preorderTraverse(tree.getRight(), list);
+        }
     }
 
     // Returns a list of elements from an inorder traversal
