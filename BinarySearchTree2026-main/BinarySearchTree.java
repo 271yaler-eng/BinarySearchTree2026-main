@@ -10,13 +10,11 @@ import java.util.*;
 public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T>
 {
     protected BinaryNode<T> root;      // reference to the root of this BST
-    protected int size;  
 
     // Creates an empty Binary Search Tree object
     public BinarySearchTree()
     {
         root = null;
-        size = 0;
     }
 
     // Returns true if this BST is empty; otherwise, returns false.
@@ -53,7 +51,6 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         if(root == null)
         {
             root = el;
-            size++;
         }
         else
         {
@@ -89,12 +86,10 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
             if(direction.equals("left"))
             {
                 traversal.setLeft(el);
-                size++;
             }
             else if(direction.equals("right"))
             {
                 traversal.setRight(el);
-                size++;
             }
         }
     }
@@ -225,7 +220,51 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Removes an element e from this BST such that e.compareTo(element) == 0
     public void remove (T element)
     {
-        
+        BinaryNode<T> e = root;
+        if(e == null)
+        {
+            e = null;
+        }
+        else if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() == null)
+        {
+            e = null;
+        }
+        else
+        {
+            while(e != null)
+            {
+                if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() == null)
+                {
+                    e = null;
+                }
+                if(e.getInfo().compareTo(element) == 0 && e.getLeft() == null && e.getRight() != null)
+                {
+                    e = e.getRight();
+                    e.setRight(null);
+                }
+                if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() == null)
+                {
+                    e = e.getLeft();
+                    e.setLeft(null);
+                }
+                if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() != null)
+                {
+                    List<T> inorder = inorderTraverse();
+                    for(int i = 0; i < inorder.size(); i++)
+                    {
+                        
+                    }
+                }
+                if(element.compareTo(e.getInfo()) < 0)
+                {
+                    e = e.getLeft();
+                }
+                else if(element.compareTo(e.getInfo()) > 0)
+                {
+                    e = e.getRight();
+                }
+            }
+        }
     }
 
     public BinaryNode<T> remove(BinaryNode<T> tree, T element)
