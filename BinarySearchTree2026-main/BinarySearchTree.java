@@ -221,65 +221,153 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public void remove (T element)
     {
         BinaryNode<T> e = root;
+        BinaryNode<T> parent = root;
         if(e == null)
         {
-            e = null;
+            root = null;
         }
         else if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() == null)
         {
-            e = null;
+            root = null;
+        }
+        else if(e.getInfo().compareTo(element) == 0 && e.getRight() != null && e.getLeft() == null)
+        {
+            root = root.getRight();
+        }
+        else if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() != null)
+        {
+            root = root.getLeft();
         }
         else
         {
-            while(e != null)
+            List<T> list = inorderTraverse();
+            boolean caniterate = false;
+            for(int i = 0; i < list.size(); i++)
             {
-                if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() == null)
+                if(list.get(i).compareTo(element) == 0)
                 {
-                    e = null;
+                    caniterate = true;
                 }
-                if(e.getInfo().compareTo(element) == 0 && e.getLeft() == null && e.getRight() != null)
-                {
-                    e = e.getRight();
-                    e.setRight(null);
-                }
-                if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() == null)
-                {
-                    e = e.getLeft();
-                    e.setLeft(null);
-                }
-                if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() != null)
-                {
-                    List<T> inorder = inorderTraverse();
-                    for(int i = 0; i < inorder.size(); i++)
-                    {
-                        
-                    }
-                }
+            }
+            while(e != null && caniterate)
+            {
                 if(element.compareTo(e.getInfo()) < 0)
                 {
+                    parent = e;
                     e = e.getLeft();
                 }
                 else if(element.compareTo(e.getInfo()) > 0)
                 {
+                    parent = e;
                     e = e.getRight();
+                }
+                else if(e.getInfo().compareTo(element) == 0 && e.getRight() == null && e.getLeft() == null)
+                { 
+                    if(parent.getRight() == e)
+                    {
+                        parent.setRight(null);
+                        break;
+                    }
+                    if(parent.getLeft() == e)
+                    {
+                        parent.setLeft(null);
+                        break;
+                    }
+                }
+                else if(e.getInfo().compareTo(element) == 0 && e.getLeft() == null && e.getRight() != null)
+                {
+                    if(parent.getRight() == e)
+                    {
+                        parent.setRight(e.getRight());
+                        break;
+                    }
+                    else if(parent.getLeft() == e)
+                    {
+                        parent.setLeft(e.getRight());
+                        break;
+                    }
+                }
+                else if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() == null)
+                {
+                    if(parent.getRight() == e)
+                    {
+                        parent.setRight(e.getLeft());
+                        break;
+                    }
+                    else if(parent.getLeft() == e)
+                    {
+                        parent.setLeft(e.getLeft());
+                        break;
+                    }
+                }
+                else if(e.getInfo().compareTo(element) == 0 && e.getLeft() != null && e.getRight() != null)
+                {
+                    BinaryNode<T> successor = e.getRight();
+                    BinaryNode<T> p = e;
+                    while(successor.getLeft() != null)
+                    {
+                        p = successor;
+                        successor = successor.getLeft();
+                    }
+                    e.setInfo(successor.getInfo());
+                    if(successor.getRight() != null)
+                    {
+                        if(p.getLeft() == successor)
+                        {
+                            p.setLeft(successor.getRight());
+                            break;
+                        }
+                        else if(p.getRight() == successor)
+                        {
+                            p.setRight(successor.getRight());
+                            break;
+                        }
+                    }
+                    else if(successor.getRight() == null)
+                    {
+                        if(p.getRight() == successor)
+                        {
+                            p.setRight(null);
+                        }
+                        else if(p.getLeft() == successor)
+                        {
+                            p.setLeft(null);
+                        }
+                    }
+                    break;
                 }
             }
         }
     }
 
-    public BinaryNode<T> remove(BinaryNode<T> tree, T element)
-    {
-        if(tree != null && element != tree.getInfo())
-        {
-            BinaryNode<T> nextLeft = remove(tree.getLeft(), element);
-            BinaryNode<T> nextRight = remove(tree.getLeft(), element);
-            
-        }
-        return tree;
-    }
-
     // Restructures this BST to be optimally balanced
     public void balance()
     {
+        List<T> list = inorderTraverse();
+        root = balance(list, 0, list.size()-1);
+    }
+
+    private BinaryNode<T> balance(List<T> list, int start, int end)
+    {
+        if(list.size() == 0 || start > end)
+        {
+            return null;
+        }
+        int middle = (start + end) / 2;
+        BinaryNode<T> midNode = new BinaryNode<>(list.get(middle));
+        midNode.setLeft(balance(list, start, middle -1));
+        midNode.setRight(balance(list, middle + 1, end));
+        return midNode;
+        // 1. Base case: no elements remain.
+
+        // 2. Find the middle index.
+
+        // 3. Create a node containing the middle element.
+
+        // 4. Recursively build its left subtree.
+
+        // 5. Recursively build its right subtree.
+
+        // 6. Return the node.
     }
 }
