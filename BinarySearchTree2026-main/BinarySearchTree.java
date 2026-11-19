@@ -358,16 +358,5 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         midNode.setLeft(balance(list, start, middle -1));
         midNode.setRight(balance(list, middle + 1, end));
         return midNode;
-        // 1. Base case: no elements remain.
-
-        // 2. Find the middle index.
-
-        // 3. Create a node containing the middle element.
-
-        // 4. Recursively build its left subtree.
-
-        // 5. Recursively build its right subtree.
-
-        // 6. Return the node.
     }
 }
